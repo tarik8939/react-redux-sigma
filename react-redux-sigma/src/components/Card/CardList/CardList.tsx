@@ -4,7 +4,7 @@ import CardItem from "../CardItem/CardItem";
 import {Col, Row} from 'antd';
 import {useTypedSelector} from "../../../hooks/useTypedSelector";
 
-const CardList: FC = (props) => {
+const CardList: FC = () => {
     let [cards, setCards] = useState(useTypedSelector(state => state.postReducer.posts))
 
     return (

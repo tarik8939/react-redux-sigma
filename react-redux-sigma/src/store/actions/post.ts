@@ -32,7 +32,7 @@ export const editPost = (post: postType): editPostsAction => {
 
 export const initPosts = () => {
     return (dispatch: Dispatch<PostAction>) => {
-        axios.get('https://jsonplaceholder.typicode.com/posts?_limit=5')
+        axios.get<postType[]>('https://jsonplaceholder.typicode.com/posts?_limit=5')
             .then(response => {
                 dispatch(setPosts(response.data))
             })
