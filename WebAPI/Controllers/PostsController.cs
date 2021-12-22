@@ -1,7 +1,14 @@
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
 using System.Threading.Tasks;
 using BusinessLogic.DTOs;
 using BusinessLogic.Logics;
+using Dapper;
+using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
+using Microsoft.IdentityModel.Protocols;
 
 namespace WebAPI.Controllers
 {
@@ -40,6 +47,20 @@ namespace WebAPI.Controllers
             }
         
             return BadRequest(new { message = "Can't find post" });
+        }
+        
+        // GET: api/Posts/user/5
+        [HttpGet("user/{id}")]
+        public async Task<ActionResult> GetPostByUserId(int id)
+        {
+            var post = await _logic.GetByUserId(id);
+        
+            if (post != null)
+            {
+                return Ok(post);
+            }
+        
+            return BadRequest(new { message = "Can't find posts" });
         }
         
         // // PUT: api/Posts/edit/5

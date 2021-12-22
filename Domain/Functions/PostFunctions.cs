@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,6 +8,8 @@ using Domain.Data;
 using Domain.Interfaces;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
+using Dapper;
+using Microsoft.Data.SqlClient;
 
 namespace Domain.Functions
 {
@@ -32,13 +35,18 @@ namespace Domain.Functions
         {
             return await _context.Posts
                 .Include(x => x.User)
+                .Include(x=>x.PostCategories)
+                .ThenInclude(x=>x.Category)
                 .ToListAsync();
+
         }
 
         public async Task<Post> GetById(int id)
         {
             return await _context.Posts
                 .Include(x => x.User)
+                .Include(x=>x.PostCategories)
+                .ThenInclude(x=>x.Category)
                 .FirstOrDefaultAsync(x => x.PostId == id);
         }
 
@@ -66,6 +74,8 @@ namespace Domain.Functions
         {
             return await _context.Posts
                 .Include(x => x.User)
+                .Include(x=>x.PostCategories)
+                .ThenInclude(x=>x.Category)
                 .Where(x => x.UserId == userId)
                 .ToListAsync();
         }

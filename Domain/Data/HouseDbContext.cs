@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Domain.Models;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 namespace Domain.Data
@@ -36,16 +38,61 @@ namespace Domain.Data
                 .IsUnique();
 
             builder.Entity<User>().HasData(
-                new User {UserId = 1,Email = "test@test.com"}
-            );
+                new User {UserId = 1,Email = "test@test.com"});
+
             builder.Entity<Post>().HasData(
-                new Post {PostId = 1 ,UserId = 1, Title = "test title", Body = "test body"}
-                );
+                new Post
+                {
+                    PostId = 1, UserId = 1, Title = "test title", Body = "test body"
+                });
+
+            builder.Entity<Category>().HasData( new List<Category>()
+            {
+                new Category { CategoryId = 1, Name = "Sport"},
+                new Category { CategoryId = 2, Name = "Science"},
+                new Category { CategoryId = 3, Name = "Technology"},
+                new Category { CategoryId = 4, Name = "Politics"},
+            });
+
+            builder.Entity<PostCategory>().HasData(new List<PostCategory>()
+            {
+                new PostCategory{PostId = 1, CategoryId = 2},
+                new PostCategory{PostId = 1, CategoryId = 3},
+            });
+
+            builder.Entity<Document>().HasData(
+                new Document {DocumentId = 1, PostId = 1});
+
+
+            builder.Entity<PostCategory>()
+                .HasKey(pc => new {pc.CategoryId, pc.PostId});
+
+            builder.Entity<PostCategory>()
+                .HasOne(pc => pc.Post)
+                .WithMany(c => c.PostCategories)
+                .HasForeignKey(pc => pc.PostId);
+
+            builder.Entity<PostCategory>()
+                .HasOne(pc => pc.Category)
+                .WithMany(c => c.PostCategories)
+                .HasForeignKey(pc => pc.CategoryId);
+
+            builder.Entity<Post>()
+                .HasOne<Document>(p => p.Document)
+                .WithOne(d => d.Post)
+                .HasForeignKey<Document>(d => d.PostId);
+
         }
 
         public DbSet<User> Users { get; set; }
 
         public DbSet<Post> Posts { get; set; }
+
+        public DbSet<PostCategory> PostCategories { get; set; }
+        
+        public DbSet<Category> Category { get; set; }
+
+        public DbSet<Document> Documents { get; set; }
 
     }
 }

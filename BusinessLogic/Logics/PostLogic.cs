@@ -13,7 +13,7 @@ namespace BusinessLogic.Logics
     public class PostLogic
     {
         private IPost _post = new PostFunctions();
-
+        private ICategory _category = new CategoryFunctions();
         public async Task<Post> Create(PostDto dto)
         {
             var post = new Post
@@ -24,7 +24,15 @@ namespace BusinessLogic.Logics
             };
             var result = await this._post.Create(post);
             if (result.PostId > 0)
+            {
+                var list = getCategories(dto.CategoryDtos, result.PostId);
+                var categoryResult = _category.Create(list);
+                if (categoryResult.Result == true)
+                {
+                   result.PostCategories = list; 
+                }
                 return result;
+            }
             else
                 return null;
         }
@@ -45,6 +53,14 @@ namespace BusinessLogic.Logics
                 return null;
             return post;
         }
+        
+        public async Task<List<Post>> GetByUserId(int userId)
+        {
+            var posts = await this._post.GetByUserId(userId);
+            if (posts.Count > 0)
+                return posts;
+            return null;
+        }
 
         public async Task<Post> Edit(int id, PostDto dto)
         {
@@ -54,6 +70,12 @@ namespace BusinessLogic.Logics
                 post.Title = dto.Title;
                 post.Body = dto.Body;
                 post.UserId = dto.UserId;
+                var list = getCategories(dto.CategoryDtos, post.PostId);
+                var categoryResult = _category.Create(list);
+                if (categoryResult.Result == true)
+                {
+                    post.PostCategories = list; 
+                }
                 var result = await this._post.Edit(post);
                 return result;
             }
@@ -68,14 +90,15 @@ namespace BusinessLogic.Logics
                 var res = await this._post.Delete(id);
             }
         }
-        public async Task<List<Post>> GetByUserId(int userId)
+        private List<PostCategory> getCategories(ICollection<CategoryDto> list, int postId)
         {
-            var posts = await this._post.GetByUserId(userId);
-            if (posts == null)
-                return null;
-            return posts;
+            return list
+                .Select(x => new PostCategory()
+                {
+                    PostId = postId,
+                    CategoryId = x.CategoryId
+                }).ToList();
         }
-
-
+        
     }
 }

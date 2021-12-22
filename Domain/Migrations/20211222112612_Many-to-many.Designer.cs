@@ -3,14 +3,16 @@ using Domain.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Domain.Migrations
 {
     [DbContext(typeof(HouseDbContext))]
-    partial class HouseDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211222112612_Many-to-many")]
+    partial class Manytomany
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -52,31 +54,6 @@ namespace Domain.Migrations
                         {
                             CategoryId = 4,
                             Name = "Politics"
-                        });
-                });
-
-            modelBuilder.Entity("Domain.Models.Document", b =>
-                {
-                    b.Property<int>("DocumentId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("PostId")
-                        .HasColumnType("int");
-
-                    b.HasKey("DocumentId");
-
-                    b.HasIndex("PostId")
-                        .IsUnique();
-
-                    b.ToTable("Documents");
-
-                    b.HasData(
-                        new
-                        {
-                            DocumentId = 1,
-                            PostId = 1
                         });
                 });
 
@@ -165,17 +142,6 @@ namespace Domain.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Domain.Models.Document", b =>
-                {
-                    b.HasOne("Domain.Models.Post", "Post")
-                        .WithOne("Document")
-                        .HasForeignKey("Domain.Models.Document", "PostId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Post");
-                });
-
             modelBuilder.Entity("Domain.Models.Post", b =>
                 {
                     b.HasOne("Domain.Models.User", "User")
@@ -213,8 +179,6 @@ namespace Domain.Migrations
 
             modelBuilder.Entity("Domain.Models.Post", b =>
                 {
-                    b.Navigation("Document");
-
                     b.Navigation("PostCategories");
                 });
 

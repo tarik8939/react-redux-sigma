@@ -7,16 +7,11 @@ using System.Threading.Tasks;
 
 namespace Domain.Models
 {
-    public class Post
+    public class Category
     {
         [Key]
-        public int PostId { get; set; }
-        public int UserId { get; set; }
-        public string Title { get; set; }
-        public string Body { get; set; }
-
-        public virtual User User { get; set; }
-        public virtual Document Document { get; set; } 
+        public int CategoryId { get; set; }
+        public string Name { get; set; }
 
         public ICollection<PostCategory> PostCategories { get; set; }
     }
