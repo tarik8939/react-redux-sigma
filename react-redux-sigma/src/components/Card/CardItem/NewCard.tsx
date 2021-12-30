@@ -5,7 +5,7 @@ import TextArea from "antd/es/input/TextArea";
 import {useDispatch} from "react-redux";
 import * as actions from '../../../store/actions/post'
 import {useHistory} from "react-router-dom";
-import {postType} from "../../../types/post";
+import {PostType} from "../../../types/post";
 
 const layout = {
     labelCol: {
@@ -27,8 +27,8 @@ const NewCard: FC<any> = () => {
     const [form] = Form.useForm();
     const history = useHistory()
 
-    const onFinish = (values: postType) => {
-        const post: postType = {...values}
+    const onFinish = (values: PostType) => {
+        const post: PostType = {...values}
         dispatch(actions.addPost(post))
         goBack();
     };

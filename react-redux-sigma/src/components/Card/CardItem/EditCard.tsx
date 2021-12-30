@@ -5,8 +5,8 @@ import TextArea from "antd/es/input/TextArea";
 import {useDispatch} from "react-redux";
 import * as actions from '../../../store/actions/post'
 import {useHistory} from "react-router-dom";
-import {postType} from "../../../types/post";
-
+import {PostType} from "../../../types/post";
+import { RouteComponentProps } from 'react-router-dom';
 const layout = {
     labelCol: {
         span: 8,
@@ -22,14 +22,14 @@ const tailLayout = {
     },
 };
 
-const EditCard: FC<any> = (props) => {
-    const [card, setCard] = useState<postType>(props.location.state)
+const EditCard: FC<RouteComponentProps> = (props) => {
+    const [card, setCard] = useState<any>(props.location.state)
     const dispatch = useDispatch()
     const [form] = Form.useForm();
     const history = useHistory()
 
-    const onFinish = (values: postType) => {
-        const editedPost: postType = {...card, ...values}
+    const onFinish = (values: PostType) => {
+        const editedPost: PostType = {...card, ...values}
         dispatch(actions.editPost(editedPost))
         goBack();
     };

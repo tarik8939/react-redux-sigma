@@ -5,12 +5,12 @@ import * as actions from '../../store/actions/post'
 import {Button, Col} from 'antd';
 import CardList from "../../components/Card/CardList/CardList";
 import {Link} from "react-router-dom";
-import {postType} from "../../types/post";
+import {PostType} from "../../types/post";
 import {RootState} from "../../store";
 
 interface PostsViewerProps {
     isloaded: boolean,
-    posts:postType[],
+    posts: PostType[],
     onInitPosts: () => void,
 }
 

@@ -1,17 +1,17 @@
 import {
-    addPostsAction,
-    editPostsAction,
-    initialStateType,
+    AddPostsAction,
+    EditPostsAction,
+    InitialStateType,
     PostAction,
     PostActionTypes,
-    setPostsAction
+    SetPostsAction
 } from "../../types/post";
 
-const initialState: initialStateType = {
+const InitialState: InitialStateType = {
     posts: [],
     isloaded: false
 };
-const setPosts = (state: initialStateType, action: setPostsAction): initialStateType => {
+const setPosts = (state: InitialStateType, action: SetPostsAction): InitialStateType => {
     return {
         posts: [
             ...action.posts
@@ -20,7 +20,7 @@ const setPosts = (state: initialStateType, action: setPostsAction): initialState
     }
 }
 
-const addPost = (state: initialStateType, action: addPostsAction): initialStateType => {
+const addPost = (state: InitialStateType, action: AddPostsAction): InitialStateType => {
     return {
         ...state,
         posts: [...state.posts, {
@@ -31,7 +31,7 @@ const addPost = (state: initialStateType, action: addPostsAction): initialStateT
     }
 }
 
-const editPost = (state: initialStateType, action: editPostsAction): initialStateType => {
+const editPost = (state: InitialStateType, action: EditPostsAction): InitialStateType => {
     return {
         ...state,
         posts: [
@@ -43,7 +43,7 @@ const editPost = (state: initialStateType, action: editPostsAction): initialStat
 }
 
 
-const reducer = (state = initialState, action: PostAction): initialStateType => {
+const reducer = (state = InitialState, action: PostAction): InitialStateType => {
     switch (action.type) {
         case PostActionTypes.SET_POSTS:
             return setPosts(state, action);

@@ -1,29 +1,29 @@
 import axios from 'axios'
 import {
-    addPostsAction,
-    editPostsAction,
+    AddPostsAction,
+    EditPostsAction,
     PostAction,
-    PostActionTypes, postType,
-    setPostsAction
+    PostActionTypes, PostType,
+    SetPostsAction
 } from "../../types/post";
 import {Dispatch} from "redux";
 
 
-export const setPosts = (posts: postType[]): setPostsAction => {
+export const setPosts = (posts: PostType[]): SetPostsAction => {
     return {
         type: PostActionTypes.SET_POSTS,
         posts: posts
     };
 };
 
-export const addPost = (post: postType): addPostsAction => {
+export const addPost = (post: PostType): AddPostsAction => {
     return {
         type: PostActionTypes.ADD_POST,
         post: post
     };
 };
 
-export const editPost = (post: postType): editPostsAction => {
+export const editPost = (post: PostType): EditPostsAction => {
     return {
         type: PostActionTypes.EDIT_POST,
         post: post
@@ -32,7 +32,7 @@ export const editPost = (post: postType): editPostsAction => {
 
 export const initPosts = () => {
     return (dispatch: Dispatch<PostAction>) => {
-        axios.get<postType[]>('https://jsonplaceholder.typicode.com/posts?_limit=5')
+        axios.get<PostType[]>('https://jsonplaceholder.typicode.com/posts?_limit=5')
             .then(response => {
                 dispatch(setPosts(response.data))
             })

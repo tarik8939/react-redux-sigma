@@ -1,12 +1,12 @@
-export interface postType {
+export interface PostType {
     id: number;
     userId: number;
     title: string;
     body: string;
 }
 
-export interface initialStateType {
-    posts: postType[];
+export interface InitialStateType {
+    posts: PostType[];
     isloaded: boolean;
 }
 
@@ -17,22 +17,22 @@ export enum PostActionTypes {
 
 }
 
-export interface setPostsAction {
+export interface SetPostsAction {
     type: PostActionTypes.SET_POSTS;
-    posts: postType[];
+    posts: PostType[];
 }
 
-export interface initPostsAction {
-    posts: postType[];
+export interface InitPostsAction {
+    posts: PostType[];
 }
 
-export interface addPostsAction {
+export interface AddPostsAction {
     type: PostActionTypes.ADD_POST;
-    post: postType;
+    post: PostType;
 }
 
-export interface editPostsAction {
+export interface EditPostsAction {
     type: PostActionTypes.EDIT_POST;
-    post: postType;
+    post: PostType;
 }
-export type PostAction = setPostsAction | addPostsAction | editPostsAction;
+export type PostAction = SetPostsAction | AddPostsAction | EditPostsAction;

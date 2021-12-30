@@ -2,14 +2,14 @@ import React, {FC, useState} from 'react';
 import 'antd/dist/antd.css';
 import {Card, Row, Col, Button} from 'antd';
 import {useHistory} from "react-router-dom";
-import {postType} from '../../../types/post'
+import {PostType} from '../../../types/post'
 
 interface ICardItem {
-    card: postType
+    card: PostType
 }
 
 const CardItem: FC<ICardItem> = ({card}) => {
-    const [item, setItem] = useState<postType>(card)
+    const [item, setItem] = useState<PostType>(card)
     let test = null
     const history = useHistory()
 
