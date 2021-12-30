@@ -10,10 +10,10 @@ using Domain.Models;
 
 namespace BusinessLogic.Logics
 {
-    public class PostLogic
+    public class PostService
     {
-        private IPost _post = new PostFunctions();
-        private ICategory _category = new CategoryFunctions();
+        private IPost _post = new PostRepository();
+        private ICategory _category = new CategoryRepository();
         public async Task<Post> Create(PostDto dto)
         {
             var post = new Post
@@ -84,10 +84,11 @@ namespace BusinessLogic.Logics
 
         public async Task Delete(int id)
         {
-            var ad = await this._post.GetById(id);
-            if (ad != null)
+            var post = await this._post.GetById(id);
+            if (post != null)
             {
-                var res = await this._post.Delete(id);
+                var resultPost = await this._post.Delete(id);
+                var resultCategory = await this._category.Delete(id);
             }
         }
         private List<PostCategory> getCategories(ICollection<CategoryDto> list, int postId)

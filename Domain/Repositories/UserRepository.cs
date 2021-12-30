@@ -10,12 +10,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Domain.Functions
 {
-    public class UserFunctions : IUser
+    public class UserRepository : IUser
     {
 
         private readonly HouseDbContext _context;
 
-        public UserFunctions()
+        public UserRepository()
         {
             _context = new HouseDbContext(HouseDbContext.ops.dbOptions);
         }
@@ -38,6 +38,7 @@ namespace Domain.Functions
         {
             return await _context.Users
                 .Include(x=>x.Posts)
+                .ThenInclude(x=>x.PostCategories)
                 .FirstOrDefaultAsync(x => x.UserId == id);
         }
 

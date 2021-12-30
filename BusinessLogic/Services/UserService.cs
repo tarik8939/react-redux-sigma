@@ -10,9 +10,9 @@ using Domain.Models;
 
 namespace BusinessLogic.Logics
 {
-    public class UserLogic
+    public class UserService
     {
-        private IUser _user = new UserFunctions();
+        private IUser _user = new UserRepository();
 
         public async Task<User> Register(UserDto dto)
         {

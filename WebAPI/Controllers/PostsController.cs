@@ -12,22 +12,23 @@ using Microsoft.IdentityModel.Protocols;
 
 namespace WebAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("posts")]
     [ApiController]
     public class PostsController : ControllerBase
     {
-        private readonly PostLogic _logic;
+        private readonly PostService service;
 
         public PostsController(PostLogic logic)
+        public PostsController(PostService _service)
         {
-            _logic = logic;
+            service = _service;
         }
 
-        // GET: api/Posts/all
-        [HttpGet("all")]
+        // GET: api/posts
+        [HttpGet]
         public async Task<IActionResult> GetPosts()
         {
-            var post = await _logic.GetAll();
+            var post = await service.GetAll();
             if (post !=null)
             {
                 return Ok(post);
@@ -35,11 +36,11 @@ namespace WebAPI.Controllers
             return BadRequest(new { message = "Can't find posts" });
         }
 
-        // GET: api/Posts/5
+        // GET: api/posts/5
         [HttpGet("{id}")]
         public async Task<ActionResult> GetPost(int id)
         {
-            var post = await _logic.GetById(id);
+            var post = await service.GetById(id);
         
             if (post != null)
             {
@@ -49,11 +50,12 @@ namespace WebAPI.Controllers
             return BadRequest(new { message = "Can't find post" });
         }
         
-        // GET: api/Posts/user/5
+        // GET: api/posts/user/5
+        // Get all posts by userId
         [HttpGet("user/{id}")]
         public async Task<ActionResult> GetPostByUserId(int id)
         {
-            var post = await _logic.GetByUserId(id);
+            var post = await service.GetByUserId(id);
         
             if (post != null)
             {
@@ -63,12 +65,12 @@ namespace WebAPI.Controllers
             return BadRequest(new { message = "Can't find posts" });
         }
         
-        // // PUT: api/Posts/edit/5
+        // // PUT: api/posts/5
         // // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("edit/{id}")]
+        [HttpPut("{id}")]
         public async Task<IActionResult> PutPost(int id, PostDto post)
         {
-            var editedPost = await _logic.Edit(id, post);
+            var editedPost = await service.Edit(id, post);
             if (editedPost != null)
             {
                 return Created("Success", editedPost);
@@ -76,12 +78,12 @@ namespace WebAPI.Controllers
             return BadRequest(new { message = "Post wasn't edited" }); 
         }
         
-        // // POST: api/Posts
+        // // POST: api/posts
         // // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult> PostPost(PostDto post)
         {
-            var newPost = await _logic.Create(post);
+            var newPost = await service.Create(post);
             if (newPost != null)
             {
                 return Created("Success", newPost);
@@ -89,12 +91,12 @@ namespace WebAPI.Controllers
             return BadRequest(new { message = "Post wasn't created" });
         }
         
-        // // DELETE: api/Posts/delete/5
-        [HttpDelete("delete/{id}")]
+        // // DELETE: api/posts/5
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePost(int id)
         {
-            await _logic.Delete(id);
-            var res = await _logic.GetById(id);
+            await service.Delete(id);
+            var res = await service.GetById(id);
             if (res==null)
             {
                 return Ok(new { message = "Post was deleted" });

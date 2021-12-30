@@ -9,18 +9,18 @@ namespace WebAPI.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly UserLogic _logic;
+        private readonly UserService service;
 
-        public UserController(UserLogic logic)
+        public UserController(UserService _service)
         {
-            _logic = logic;
+            service = _service;
         }
         
         // GET: api/UserControllers/5
         [HttpGet("{id}")]
         public async Task<ActionResult> GetUser(int id)
         {
-            var user = await _logic.GetById(id);
+            var user = await service.GetById(id);
         
             if (user != null)
             {
@@ -35,7 +35,7 @@ namespace WebAPI.Controllers
         [HttpPost]
         public async Task<ActionResult> PostUser(UserDto user)
         {
-            var newUser = await _logic.Register(user);
+            var newUser = await service.Register(user);
             if (newUser != null)
             {
                 return Created("Success", newUser);

@@ -13,14 +13,17 @@ using Microsoft.Data.SqlClient;
 
 namespace Domain.Functions
 {
-    public class PostFunctions : IPost
+    public class PostRepository : IPost
     {
 
         private readonly HouseDbContext _context;
+        
+        private readonly IDbConnection _dbConnection;
 
-        public PostFunctions()
+        public PostRepository()
         {
             _context = new HouseDbContext(HouseDbContext.ops.dbOptions);
+            _dbConnection = new SqlConnection(new AppConfiguration().SqlConnectionString);
         }
 
 
@@ -33,6 +36,10 @@ namespace Domain.Functions
 
         public async Task<List<Post>> GetAll()
         {
+            //var sql = "Select * From Posts inner join Users ON Posts.UserId = Users.UserId";
+            //var posts = _dbConnection.Query<Post>(sql).ToList();
+            //return posts;
+
             return await _context.Posts
                 .Include(x => x.User)
                 .Include(x=>x.PostCategories)

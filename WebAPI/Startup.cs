@@ -40,6 +40,8 @@ namespace WebAPI
             
             services.AddScoped<PostLogic>();
             services.AddScoped<UserLogic>();
+            services.AddScoped<PostService>();
+            services.AddScoped<UserService>();
 
         }
 
