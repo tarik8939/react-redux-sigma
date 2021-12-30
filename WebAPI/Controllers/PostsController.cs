@@ -18,7 +18,6 @@ namespace WebAPI.Controllers
     {
         private readonly PostService service;
 
-        public PostsController(PostLogic logic)
         public PostsController(PostService _service)
         {
             service = _service;
