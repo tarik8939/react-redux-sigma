@@ -12,13 +12,9 @@ class App extends Component {
         return (
             <BrowserRouter>
                 <Layuot>
-                    {/*<Switch>*/}
-                    {/*<Route path="/" exact component={AlbumViewer}/>*/}
                     <Route path="/" exact component={AlbumViewer}/>
                     <Route path="/edit" component={EditCard}/>
                     <Route path="/addNew" component={NewCard}/>
-                    {/*</Switch>*/}
-
                 </Layuot>
             </BrowserRouter>
         );

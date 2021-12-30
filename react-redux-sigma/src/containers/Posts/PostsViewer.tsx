@@ -5,11 +5,18 @@ import * as actions from '../../store/actions/post'
 import {Button, Col} from 'antd';
 import CardList from "../../components/Card/CardList/CardList";
 import {Link} from "react-router-dom";
+import {PostType} from "../../types/post";
+import {RootState} from "../../store";
 
+interface PostsViewerProps {
+    isloaded: boolean,
+    posts: PostType[],
+    onInitPosts: () => void,
+}
 
-class PostsViewer extends Component {
+class PostsViewer extends Component<PostsViewerProps, {}> {
 
-    componentDidMount () {
+    componentDidMount ():void {
         if (!this.props.isloaded) {
             this.props.onInitPosts();
         }
@@ -19,7 +26,7 @@ class PostsViewer extends Component {
 
         const writePosts = () => {
             if (this.props.isloaded) {
-                return <CardList items={this.props.posts}/>
+                return <CardList />
             }
         }
 
@@ -39,17 +46,18 @@ class PostsViewer extends Component {
     }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state: RootState) => {
     return {
         posts: state.postReducer.posts,
         isloaded: state.postReducer.isloaded
 
     };
 }
-
-const mapDispatchToProps = dispatch => {
+//TODO:must be typed
+// const mapDispatchToProps = (dispatch: Dispatch<PostAction>) => {
+const mapDispatchToProps = (dispatch:any)=> {
     return {
-        onInitPosts: () => dispatch(actions.initPosts())
+        onInitPosts: () => dispatch(actions.initPosts()),
     }
 }
 

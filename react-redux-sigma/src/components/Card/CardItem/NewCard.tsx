@@ -1,10 +1,11 @@
-import React, {useEffect, useState} from 'react';
+import React, {FC} from 'react';
 import {Form, Input, Button} from 'antd';
 import 'antd/dist/antd.css';
 import TextArea from "antd/es/input/TextArea";
 import {useDispatch} from "react-redux";
 import * as actions from '../../../store/actions/post'
 import {useHistory} from "react-router-dom";
+import {PostType} from "../../../types/post";
 
 const layout = {
     labelCol: {
@@ -21,31 +22,20 @@ const tailLayout = {
     },
 };
 
-const EditCard = (props) => {
-    const [card, setCard] = useState(props.location.state)
+const NewCard: FC<any> = () => {
     const dispatch = useDispatch()
     const [form] = Form.useForm();
     const history = useHistory()
 
-    const onFinish = (values) => {
-        const editedPost = {...card, ...values}
-        dispatch(actions.editPost(editedPost))
+    const onFinish = (values: PostType) => {
+        const post: PostType = {...values}
+        dispatch(actions.addPost(post))
         goBack();
     };
-    const onFill = () => {
-        form.setFieldsValue({
-            title: card.title,
-            body: card.body,
-        });
-    };
-    useEffect(()=> {
-        onFill()
-    },[])
-
     const goBack = () => {
-        // history.goBack()
         history.push("/")
     };
+
     return (
         <Form {...layout} form={form} name="control-hooks" style={{marginTop: 35}} onFinish={onFinish}>
             <Form.Item
@@ -76,16 +66,12 @@ const EditCard = (props) => {
                 <Button type="primary" htmlType="submit">
                     Submit
                 </Button>
-                <Button type="link" htmlType="button" onClick={onFill}>
-                    Fill form
-                </Button>
                 <Button type="link" htmlType="button" onClick={goBack}>
                     Go back
                 </Button>
             </Form.Item>
         </Form>
-
     );
 };
 
-export default EditCard;
+export default NewCard;

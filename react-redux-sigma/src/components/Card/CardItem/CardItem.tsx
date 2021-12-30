@@ -1,14 +1,19 @@
-import React, {useState} from 'react';
+import React, {FC, useState} from 'react';
 import 'antd/dist/antd.css';
 import {Card, Row, Col, Button} from 'antd';
 import {useHistory} from "react-router-dom";
+import {PostType} from '../../../types/post'
 
-const CardItem = (props) => {
-    const [item, setItem] = useState(props.item)
+interface ICardItem {
+    card: PostType
+}
+
+const CardItem: FC<ICardItem> = ({card}) => {
+    const [item, setItem] = useState<PostType>(card)
     let test = null
     const history = useHistory()
 
-    const asd = () => {
+    const redirect = () => {
         const path = "edit"
         history.push(path, item)
     }
@@ -19,7 +24,7 @@ const CardItem = (props) => {
             <Col span={22} offset={24}>
                 <Card title={item.id}
                       extra={
-                          <Button onClick={() => asd()} type="primary">Edit</Button>
+                          <Button onClick={() => redirect()} type="primary">Edit</Button>
                       }
                       bordered={true} style={{marginBottom: 5}}>
 
