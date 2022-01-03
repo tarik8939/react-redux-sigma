@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using BusinessLogic.Logics;
+using Domain.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -38,10 +39,9 @@ namespace WebAPI
             services.AddControllers().AddNewtonsoftJson(options =>
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             
-            services.AddScoped<PostLogic>();
-            services.AddScoped<UserLogic>();
             services.AddScoped<PostService>();
             services.AddScoped<UserService>();
+            services.AddScoped<CategoryService>();
 
         }
 

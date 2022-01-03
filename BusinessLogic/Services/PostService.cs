@@ -14,6 +14,17 @@ namespace BusinessLogic.Logics
     {
         private IPost _post = new PostRepository();
         private ICategory _category = new CategoryRepository();
+        private readonly IDatabaseService _database;
+        
+        public PostService(IDatabaseService database)
+        {
+            _database = database;
+        }
+        
+        public PostService()
+        {
+        }
+
         public async Task<Post> Create(PostDto dto)
         {
             var post = new Post
@@ -37,7 +48,7 @@ namespace BusinessLogic.Logics
                 return null;
         }
 
-        public async Task<ICollection<Post>> GetAll()
+        public async Task<ICollection<Post>> GetAll2()
         {
             var posts = await this._post.GetAll();
             if (posts.Count > 0)
@@ -45,12 +56,28 @@ namespace BusinessLogic.Logics
             else
                 return null;
         }
-
+        
+        public async Task<ICollection<Post>> GetAll()
+        {
+            var posts = await this._database.Posts.GetAll();
+            if (posts.Count > 0)
+                return posts;
+            else
+                return null;
+        }
+        
         public async Task<Post> GetById(int id)
         {
+            var post = await this._database.Posts.GetById(id);
+            if (post == null) 
+                throw new NullReferenceException("The selected post doesn't exist");;
+            return post;
+        }
+        public async Task<Post> GetById2(int id)
+        {
             var post = await this._post.GetById(id);
-            if (post == null)
-                return null;
+            if (post == null) 
+                throw new NullReferenceException("The selected post doesn't exist");;
             return post;
         }
         
@@ -71,17 +98,13 @@ namespace BusinessLogic.Logics
                 post.Body = dto.Body;
                 post.UserId = dto.UserId;
                 var list = getCategories(dto.CategoryDtos, post.PostId);
-                var categoryResult = _category.Create(list);
-                if (categoryResult.Result == true)
-                {
-                    post.PostCategories = list; 
-                }
+                post.PostCategories = list;
                 var result = await this._post.Edit(post);
                 return result;
             }
             return null;
         }
-
+        
         public async Task Delete(int id)
         {
             var post = await this._post.GetById(id);
@@ -97,7 +120,8 @@ namespace BusinessLogic.Logics
                 .Select(x => new PostCategory()
                 {
                     PostId = postId,
-                    CategoryId = x.CategoryId
+                    CategoryId = x.CategoryId,
+
                 }).ToList();
         }
         

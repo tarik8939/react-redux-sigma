@@ -1,14 +1,7 @@
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
 using System.Threading.Tasks;
 using BusinessLogic.DTOs;
 using BusinessLogic.Logics;
-using Dapper;
-using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
-using Microsoft.IdentityModel.Protocols;
 
 namespace WebAPI.Controllers
 {
@@ -27,7 +20,7 @@ namespace WebAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetPosts()
         {
-            var post = await service.GetAll();
+            var post = await service.GetAll2();
             if (post !=null)
             {
                 return Ok(post);
@@ -39,7 +32,7 @@ namespace WebAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult> GetPost(int id)
         {
-            var post = await service.GetById(id);
+            var post = await service.GetById2(id);
         
             if (post != null)
             {
