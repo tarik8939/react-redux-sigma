@@ -83,7 +83,7 @@ namespace UnitTests
                 .Setup(service => service.Posts)
                 .Returns(repositoryMock.Object);
 
-            var postService = new PostService(dbSrviceMock.Object); ///!!
+            var postService = new PostService(dbSrviceMock.Object); 
             var result = postService.GetById(inputId).Result;
             
             Assert.Equal(existingPost.PostId, result.PostId);
@@ -108,8 +108,8 @@ namespace UnitTests
                 .Setup(service => service.Posts)
                 .Returns(repositoryMock.Object);
         
-            var postService = new PostService(dbSrviceMock.Object); ///!!
-            var ex = await Assert.ThrowsAsync<NullReferenceException>(() => postService.GetById2(inputId));
+            var postService = new PostService(dbSrviceMock.Object); 
+            var ex = await Assert.ThrowsAsync<NullReferenceException>(() => postService.GetById(inputId));
             ex.Message.Contains("The selected post doesn't exist");
         }
         
@@ -128,7 +128,7 @@ namespace UnitTests
                 .Setup(service => service.Posts)
                 .Returns(repositoryMock.Object);
         
-            var postService = new PostService(dbSrviceMock.Object); ///!!
+            var postService = new PostService(dbSrviceMock.Object); 
             var result = postService.GetAll().Result;
             result.Equals(GetFakePosts());
         }
