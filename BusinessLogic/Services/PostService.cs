@@ -80,8 +80,14 @@ namespace BusinessLogic.Logics
                 throw new NullReferenceException("The selected post doesn't exist");;
             return post;
         }
-        
         public async Task<List<Post>> GetByUserId(int userId)
+        {
+            var posts = await _database.Posts.GetByUserId(userId);
+            if (posts.Count > 0)
+                return posts;
+            return null;
+        }
+        public async Task<List<Post>> GetByUserId2(int userId)
         {
             var posts = await this._post.GetByUserId(userId);
             if (posts.Count > 0)

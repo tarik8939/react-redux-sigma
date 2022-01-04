@@ -41,7 +41,7 @@ namespace WebAPI
             
             services.AddScoped<PostService>();
             services.AddScoped<UserService>();
-            services.AddScoped<CategoryService>();
+            // services.AddScoped<CategoryService>();
 
         }
 

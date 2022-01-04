@@ -8,70 +8,50 @@ using Domain.Functions;
 using Domain.Interfaces;
 using Domain.Models;
 using Moq;
+using AutoFixture;
+using AutoFixture.Xunit2;
 
 namespace UnitTests
 {
     public class PostServiceTests
     {
-        private List<Post> GetFakePosts()
+        private Fixture fixture { get; set; }
+        private int amountOfPosts { get; set; }
+
+        private List<Post> Posts;
+
+        private List<Post> getPosts(int amountOfPosts)
         {
-            var posts = new List<Post>()
+            var posts = new List<Post>();
+            var fixture = new Fixture();
+
+            for (int i = 1; i <= amountOfPosts; i++)
             {
-                new Post
-                {
-                    PostId = 1,
-                    UserId = 1,
-                    Title = "Test title",
-                    Body = "Test body",
-                    Document = new Document(){PostId = 1,DocumentId = 1},
-                    User = new User()
-                    {
-                        UserId = 1,
-                        Email = "adasd",
-                        Posts = new List<Post>()
-                    },
-                    PostCategories = new List<PostCategory>(){}
-                },
-                new Post
-                {
-                    PostId = 2,
-                    UserId = 1,
-                    Title = "Test title2",
-                    Body = "Test body2",
-                    Document = new Document(){PostId = 2,DocumentId = 2},
-                    User = new User()
-                    {
-                        UserId = 1,
-                        Email = "adasd",
-                        Posts = new List<Post>()
-                    },
-                    PostCategories = new List<PostCategory>(){}
-                },
-                new Post
-                {
-                    PostId = 3,
-                    UserId = 1,
-                    Title = "Test title3",
-                    Body = "Test body3",
-                    Document = new Document(){PostId = 3,DocumentId = 3},
-                    User = new User()
-                    {
-                        UserId = 1,
-                        Email = "adasd",
-                        Posts = new List<Post>()
-                    },
-                    PostCategories = new List<PostCategory>(){}
-                },
-            };
+                var post = fixture.Build<Post>()
+                    .With(x=>x.PostId, i)
+                    .Without(x => x.Document)
+                    .Without(x => x.PostCategories)
+                    .Without(x => x.User)
+                    .Create<Post>();
+                posts.Add(post);
+            }
             return posts;
+        }
+        
+        public PostServiceTests()
+        {
+            fixture = new Fixture();
+            amountOfPosts = fixture.Create<int>();
+            fixture.Customizations.Add(new RandomNumericSequenceGenerator(1, amountOfPosts));
+            Posts = getPosts(amountOfPosts);
+
         }
 
         [Fact]
         public void GetExisingPost()
         {
-            var inputId = 1;
-            var PostsCollection = GetFakePosts();
-            var existingPost = PostsCollection.First(x => x.PostId == inputId);
+            var inputId = fixture.Create<int>();
+            var existingPost = Posts.First(x => x.PostId == inputId);
 
             var dbSrviceMock = new Mock<IDatabaseService>();
             var repositoryMock = new Mock<IPost>();
@@ -97,7 +77,7 @@ namespace UnitTests
         [Fact]
         public async Task GetNotExisingPost()
         {
-            var inputId = 10;
+            var inputId = fixture.Create<int>();
             var dbSrviceMock = new Mock<IDatabaseService>();
             var repositoryMock = new Mock<IPost>();
         
@@ -116,23 +96,21 @@ namespace UnitTests
         [Fact]
         public async Task GetPostsByUserId()
         {
-            var userId = 1;
-            
+            var post = Posts.FirstOrDefault(x=>x.PostId == fixture.Create<int>());
+            var userId = post.UserId;
             var dbSrviceMock = new Mock<IDatabaseService>();
             var repositoryMock = new Mock<IPost>();
         
             repositoryMock
-                .Setup(dbPost => dbPost.GetAll().Result)
-                .Returns(GetFakePosts());
+                .Setup(dbPost => dbPost.GetByUserId(userId).Result)
+                .Returns(Posts);
             dbSrviceMock
                 .Setup(service => service.Posts)
                 .Returns(repositoryMock.Object);
         
             var postService = new PostService(dbSrviceMock.Object); 
-            var result = postService.GetAll().Result;
-            result.Equals(GetFakePosts());
+            var result = postService.GetByUserId(userId).Result;
+            result.Equals(Posts);
         }
-        
-        
     }
 }
