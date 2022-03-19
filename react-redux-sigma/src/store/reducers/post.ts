@@ -26,7 +26,7 @@ const addPost = (state: InitialStateType, action: AddPostsAction): InitialStateT
         posts: [...state.posts, {
             ...action.post,
             userId: 1,
-            id: state.posts.length + 1
+            postId: state.posts.length + 1
         }]
     }
 }
@@ -35,7 +35,7 @@ const editPost = (state: InitialStateType, action: EditPostsAction): InitialStat
     return {
         ...state,
         posts: [
-            ...state.posts.map(post => post.id === action.post.id ?
+            ...state.posts.map(post => post.postId === action.post.postId ?
                 {...action.post} : post
             )
         ]

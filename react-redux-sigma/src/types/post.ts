@@ -1,8 +1,22 @@
+import {UserType} from "./user";
+import { PostCategoryType, PostCategoryTypeDTO} from "./category";
+
 export interface PostType {
-    id: number;
+    postId: number;
     userId: number;
     title: string;
     body: string;
+    user: UserType;
+    document?: DocumentType;
+    postCategories: PostCategoryType[];
+}
+
+export interface PostType2 {
+    postId: number;
+    userId: number;
+    title: string;
+    body: string;
+    postCategories: PostCategoryTypeDTO[];
 }
 
 export interface InitialStateType {

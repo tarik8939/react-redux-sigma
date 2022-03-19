@@ -20,6 +20,10 @@ namespace Domain.Functions
         public async Task<bool> Create(List<PostCategory> list)
         {
             list.ForEach(x=>_context.PostCategories.Add(x));
+            // list.ForEach(x =>
+            // {
+            //     _context.PostCategories.Add(x);
+            // });
             await _context.SaveChangesAsync();
             return true;
            
@@ -36,6 +40,18 @@ namespace Domain.Functions
 
             await _context.SaveChangesAsync();
             return true;
+        }
+
+        public async Task<List<Category>> GetAll()
+        {
+            return await _context.Category
+                .ToListAsync();
+        }
+
+        public Category GetById(int id)
+        {
+            var a = _context.Category.FirstOrDefault(x => x.CategoryId == id);
+            return a;
         }
     }
 }

@@ -8,5 +8,7 @@ namespace Domain.Interfaces
     {
         Task<bool> Create(List<PostCategory> list);
         Task<bool> Delete(int postId);
+        Task<List<Category>> GetAll();
+        Category GetById(int id);
     }
 }

@@ -13,7 +13,7 @@ const CardList: FC = () => {
             <Row gutter={16}>
                 <Col span={8}>
                     {cards.map((x: PostType) => (
-                        <CardItem card={x} key={x.id}/>
+                        <CardItem card={x} key={x.postId}/>
                     ))}
                 </Col>
             </Row>

@@ -3,10 +3,16 @@ import {Form, Input, Button} from 'antd';
 import 'antd/dist/antd.css';
 import TextArea from "antd/es/input/TextArea";
 import {useDispatch} from "react-redux";
-import * as actions from '../../../store/actions/post'
+import actions from '../../../store/actions/index'
+
 import {useHistory} from "react-router-dom";
-import {PostType} from "../../../types/post";
-import { RouteComponentProps } from 'react-router-dom';
+import {PostType, PostType2} from "../../../types/post";
+import {RouteComponentProps} from 'react-router-dom';
+import {useTypedSelector} from "../../../hooks/useTypedSelector";
+import {CategoryType, PostCategoryType, PostCategoryTypeDTO} from "../../../types/category";
+import {Select} from 'antd';
+import {UserType} from "../../../types/user";
+
 const layout = {
     labelCol: {
         span: 8,
@@ -22,16 +28,45 @@ const tailLayout = {
     },
 };
 
-const EditCard: FC<RouteComponentProps> = (props) => {
-    const [card, setCard] = useState<any>(props.location.state)
+
+const EditCard: FC<any> = (props) => {
+    const [card] = useState<PostType>(props.location.state)
+    const [categories] = useState<CategoryType[]>(useTypedSelector(state => state.categoryReducer.categories))
     const dispatch = useDispatch()
     const [form] = Form.useForm();
     const history = useHistory()
 
-    const onFinish = (values: PostType) => {
-        const editedPost: PostType = {...card, ...values}
-        dispatch(actions.editPost(editedPost))
-        goBack();
+    const categoriesList = (
+        categories.map((x: CategoryType) => (
+            // <Select.Option key={x.categoryId} value={JSON.stringify(x)}>{x.name}</Select.Option>
+            <Select.Option key={x.categoryId} value={x.categoryId}>{x.name}</Select.Option>
+        ))
+    );
+
+    const selectedCategories = (
+        card.postCategories.map((x: PostCategoryType) => (
+            x.categoryId
+        ))
+    )
+
+    const onFinish = (values: PostType2) => {
+
+        let editedPost: PostType2 = {...card, ...values}
+
+        if (editedPost.postCategories === undefined) {
+            editedPost.postCategories = [...card.postCategories.map((x: PostCategoryTypeDTO) => ({
+                categoryId: x.categoryId,
+            }))]
+        } else {
+            // @ts-ignore
+            editedPost.postCategories = [...values.postCategories.map((x:PostCategoryTypeDTO) => ({
+                categoryId: x,
+            }))]
+        }
+
+        dispatch(actions.updatePost(editedPost,editedPost.postId))
+        // dispatch(actions.editPost(editedPost))
+        // goBack();
     };
     const onFill = () => {
         form.setFieldsValue({
@@ -39,12 +74,13 @@ const EditCard: FC<RouteComponentProps> = (props) => {
             body: card.body,
         });
     };
-    useEffect(()=> {
+    useEffect(() => {
         onFill()
-    },[])
+    }, [])
 
     const goBack = () => {
         history.push("/")
+        // history.goBack()
     };
     return (
         <Form {...layout} form={form} name="control-hooks" style={{marginTop: 35}} onFinish={onFinish}>
@@ -72,6 +108,17 @@ const EditCard: FC<RouteComponentProps> = (props) => {
             >
                 <TextArea style={{height: 150}}/>
             </Form.Item>
+
+            <Form.Item label="Select" name="postCategories"
+                       rules={[{type: 'array'}]}>
+                <Select mode="multiple"
+                        style={{width: '100%'}}
+                        placeholder="Tags Mode"
+                        defaultValue={selectedCategories}>
+                    {categoriesList}
+                </Select>
+            </Form.Item>
+
             <Form.Item {...tailLayout}>
                 <Button type="primary" htmlType="submit">
                     Submit

@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
-import * as actions from '../../store/actions/post'
+import actions from '../../store/actions/index'
 import {Button, Col} from 'antd';
 import CardList from "../../components/Card/CardList/CardList";
 import {Link} from "react-router-dom";
@@ -12,6 +12,7 @@ interface PostsViewerProps {
     isloaded: boolean,
     posts: PostType[],
     onInitPosts: () => void,
+    onInitCategories: () => void,
 }
 
 class PostsViewer extends Component<PostsViewerProps, {}> {
@@ -19,6 +20,7 @@ class PostsViewer extends Component<PostsViewerProps, {}> {
     componentDidMount ():void {
         if (!this.props.isloaded) {
             this.props.onInitPosts();
+            this.props.onInitCategories();
         }
     }
 
@@ -58,6 +60,7 @@ const mapStateToProps = (state: RootState) => {
 const mapDispatchToProps = (dispatch:any)=> {
     return {
         onInitPosts: () => dispatch(actions.initPosts()),
+        onInitCategories: () => dispatch(actions.initCategories())
     }
 }
 
